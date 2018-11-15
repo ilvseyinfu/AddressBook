@@ -10,7 +10,7 @@
     </div>
 
     <div class="clear">
-      <el-button size="small" type="danger" plain>一键清除</el-button>
+      <el-button v-if="!loading" size="small" type="danger" plain @click="removeAll">一键清除</el-button>
     </div>
 
     <div class="list">
@@ -104,7 +104,7 @@ export default {
 
     // 2s 后插入本地存储的模拟数据
     setTimeout(() => {
-      this.table = this.db_person.addAll(this.store);
+      //this.table = this.db_person.addAll(this.store);
     }, 1000)
 
     // 5s 后读取本地存储的模拟数据 进行渲染
@@ -161,6 +161,28 @@ export default {
       // 前端删除数据
       this.tableData.splice(i, 1);
       this.$message.success('删除成功');
+    },
+
+    removeAll () {
+      this.$confirm('此操作将永久删除所有联系人, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 后端删除
+        this.db_person.removeAll();
+        // 前端删除
+        this.tableData = [];
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
 
