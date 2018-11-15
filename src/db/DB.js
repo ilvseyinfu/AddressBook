@@ -143,6 +143,17 @@ export default class IndexedDB {
 		}
 	}
 
+	removeAll (pushErr = (err) => {throw new Error(err)}) {
+		var request = this.db.transaction(['person'], 'readwrite').objectStore('person').clear();
+		request.onsuccess = (event) => {
+			console.log('clear success');
+		}
+		request.onerror = (event) => {
+			push(event.target.error);
+		} 
+	}
+
+	// 指定更新
 	update (i, pushErr = (err) => {throw new Error(err)}) {
 		var request = this.db.transaction(['person'], 'readwrite').objectStore('person')
 		.put(i)

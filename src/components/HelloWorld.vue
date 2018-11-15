@@ -9,6 +9,10 @@
       <el-input suffix-icon="el-icon-plus" v-model.trim="input" placeholder="请输入内容" @keyup.enter.native="addOne"></el-input>
     </div>
 
+    <div class="clear">
+      <el-button size="small" type="danger" plain>一键清除</el-button>
+    </div>
+
     <div class="list">
       <el-table
           v-loading="loading"
@@ -85,8 +89,6 @@ export default {
         { id: 0, name: '张三', email: 'ilvseyinfu1@gmail.com' },
         { id: 1, name: '李四', email: 'ilvseyinfu2@gmail.com' },
         { id: 2, name: '王五', email: 'ilvseyinfu3@gmail.com' },
-        { id: 3, name: '赵六', email: 'ilvseyinfu4@gmail.com' },      
-        { id: 4, name: '陈七', email: 'ilvseyinfu5@gmail.com' },
       ],
       // 表配置
       tables: [
@@ -102,7 +104,7 @@ export default {
 
     // 2s 后插入本地存储的模拟数据
     setTimeout(() => {
-      //this.table = this.db_person.addAll(this.store);
+      this.table = this.db_person.addAll(this.store);
     }, 1000)
 
     // 5s 后读取本地存储的模拟数据 进行渲染
@@ -185,9 +187,19 @@ a {
   color: #42b983;
 }
 
+.hello {
+  width: 500px;
+  margin: 0px auto;
+}
+
 .input {
   width: 500px;
   margin: 30px auto;
+}
+
+.clear {
+  width: 500px;
+  text-align: left;
 }
 
 .list {
