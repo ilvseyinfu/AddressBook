@@ -1,7 +1,18 @@
 <template>
   <div class="hello">
-    {{msg}}
+    <div class="header">
+      <i class="el-icon-news"></i>
+      <span>{{title}}</span>      
+    </div>
+
+    <div class="input">
+      <el-input suffix-icon="el-icon-plus" v-model.trim="input" placeholder="请输入内容" @keyup.enter.native="addOne"></el-input>
+    </div>
+
+    <div class="list"></div>
   </div>
+
+
 </template>
 
 <script>
@@ -19,7 +30,8 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'IndexedDB TEST',
+      input: '',
+      title: 'TodoList With IndexedDB',
       db_person: null,
       // 本地模拟存储数据
       store: [
@@ -55,7 +67,9 @@ export default {
   },
 
   methods: {
-
+    addOne () {
+      alert(1)
+    }
   },
 
   mounted () {
@@ -80,4 +94,11 @@ li {
 a {
   color: #42b983;
 }
+
+.input {
+  width: 400px;
+  margin: 30px auto;
+}
+
+
 </style>
