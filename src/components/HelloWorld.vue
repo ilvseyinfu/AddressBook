@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+
     <div class="header">
       <img class="logo" src="../assets/tel.svg" />
       <span>{{title}}</span>      
@@ -33,11 +34,14 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.$index, scope.row)">
+                <img class="edit" src="../assets/edit.svg" />
+                </el-button>
               <el-button
                 size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.$index, scope.row)">
+                <img class="edit" src="../assets/del.svg" />
+                </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -65,7 +69,6 @@
 <script>
 
 import IndexedDB from '../db/DB.js';
-
 
 export default {
   name: 'HelloWorld',
@@ -234,6 +237,10 @@ a {
   }  
 }
 
+.edit {
+  width: 20px;
+  height: 20px;
+}
 
 
 </style>
