@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div class="header">
-      <i class="el-icon-news"></i>
+      <img class="logo" src="../assets/tel.svg" />
       <span>{{title}}</span>      
     </div>
 
@@ -10,7 +10,7 @@
     </div>
 
     <div class="clear">
-      <el-button v-if="!loading" size="small" type="danger" plain @click="removeAll">一键清除</el-button>
+      <el-button v-if="!loading" size="small" type="primary" plain @click="removeAll">一键清除</el-button>
     </div>
 
     <div class="list">
@@ -82,13 +82,9 @@ export default {
           name: '暂无',
           email: '数据初始化中'
         }],
-
-
       // 本地模拟存储数据
       store: [
         { id: 0, name: '张三', email: 'ilvseyinfu1@gmail.com' },
-        { id: 1, name: '李四', email: 'ilvseyinfu2@gmail.com' },
-        { id: 2, name: '王五', email: 'ilvseyinfu3@gmail.com' },
       ],
       // 表配置
       tables: [
@@ -104,7 +100,7 @@ export default {
 
     // 2s 后插入本地存储的模拟数据
     setTimeout(() => {
-      //this.table = this.db_person.addAll(this.store);
+      this.table = this.db_person.addAll(this.store);
     }, 1000)
 
     // 5s 后读取本地存储的模拟数据 进行渲染
@@ -194,7 +190,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 h1, h2 {
   font-weight: normal;
 }
@@ -229,5 +225,15 @@ a {
   width: 500px;
   margin: 30px auto;
 }
+
+.header {
+  font-size: 24px;
+  .logo {
+    width: 40px;
+    height: 40px;
+  }  
+}
+
+
 
 </style>
