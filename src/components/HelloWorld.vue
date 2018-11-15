@@ -11,13 +11,14 @@
 
     <div class="list">
       <el-table
+          v-loading="loading"
           :data="tableData"
           stripe
           style="width: 100%">
           <el-table-column
             prop="name"
             label="姓名"
-            width="50">
+            width="75">
           </el-table-column>
           <el-table-column
             prop="email"
@@ -37,6 +38,20 @@
           </el-table-column>
         </el-table>
 
+
+        <el-dialog
+          title="提示"
+          :visible.sync="modifyDialogVisible"
+          width="30%"
+          center>
+          <el-input suffix-icon="el-icon-plus" v-model.trim="modify" placeholder="请输入修改内容" ></el-input>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="modifyDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="doModify">确 定</el-button>
+          </span>
+        </el-dialog>
+
+
     </div>
   </div>
 
@@ -47,32 +62,21 @@
 
 import IndexedDB from '../db/DB.js';
 
-/*
-
-
-
- */
-
 
 export default {
   name: 'HelloWorld',
   data () {
     return {
+      modify_index: null,
+      modify: '',
+      loading: true,
       input: '',
+      modifyDialogVisible: false,
       title: 'AddressBook With IndexedDB',
       db_person: null,
       tableData: [{
-          name: '张三',
-          email: 'ilvseyinfu1@gmail.com'
-        }, {
-          name: '李四',
-          email: 'ilvseyinfu2@gmail.com'
-        }, {
-          name: '王五',
-          email: 'ilvseyinfu3@gmail.com'
-        }, {
-          name: '赵六',
-          email: 'ilvseyinfu4@gmail.com'
+          name: '暂无',
+          email: '数据初始化中'
         }],
 
 
@@ -96,26 +100,66 @@ export default {
     this.db_person.callback();
     this.db_person.open(this.tables[0]);
 
-    // 2s 后插入本地存储的数据
+    // 2s 后插入本地存储的模拟数据
     setTimeout(() => {
-      this.db_person.addAll(this.store);
-    }, 2000)
+      //this.table = this.db_person.addAll(this.store);
+    }, 1000)
 
-    // 5s 后全部读取
+    // 5s 后读取本地存储的模拟数据 进行渲染
     setTimeout(() => {
-      this.db_person.readAll();
-    }, 5000)
+      this.tableData = this.db_person.readAll();
+      this.$message.success('本地数据加载成功');
+      this.loading = false;
+    }, 3000)
 
 
   },
 
   methods: {
     addOne () {
-      alert(1)
+      let dataArr = [];
+      dataArr = this.input.split(' ');
+      this.db_person.add({
+        id: this.tableData.length,
+        name: dataArr[0],
+        email: dataArr[1]
+      })
+      this.tableData.push({
+        name: dataArr[0],
+        email: dataArr[1]
+      });
+      this.$message.success('增加成功');
     },
 
-    handleEdit () {},
-    handleDelete () {}
+    handleEdit (i) {
+      this.modifyDialogVisible = true;
+      this.modify_index = i;
+    },
+
+    doModify () {
+      let dataArr = [];
+      dataArr = this.modify.split(' ');
+      // 前端修改
+      this.tableData[this.modify_index].name = dataArr[0];
+      this.tableData[this.modify_index].email = dataArr[1];
+
+      // 后端修改
+      this.db_person.update({
+        id: this.modify_index,
+        name: dataArr[0],
+        email: dataArr[1]
+      })
+      this.$message.success('更新数据成功');
+      this.modifyDialogVisible = false
+    },
+
+    handleDelete (i) {
+      // 数据库删除指定数据
+      this.db_person.remove(i);
+      // 前端删除数据
+      this.tableData.splice(i, 1);
+      this.$message.success('删除成功');
+    }
   },
 
   mounted () {
@@ -142,12 +186,12 @@ a {
 }
 
 .input {
-  width: 400px;
+  width: 500px;
   margin: 30px auto;
 }
 
 .list {
-  width: 400px;
+  width: 500px;
   margin: 30px auto;
 }
 

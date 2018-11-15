@@ -112,13 +112,15 @@ export default class IndexedDB {
 		}
 	}
 
-	readAll (pushErr = (err) => {throw new Error(err)}) {
+  readAll (pushErr = (err) => {throw new Error(err)}) {
+		let getData = [];
 		var objectStore = this.db.transaction('person').objectStore('person')
 
-		objectStore.openCursor().onsuccess = (event) => {
+		objectStore.openCursor().onsuccess =  (event) => {
 				var cursor = event.target.result;
 				if(cursor) {
-					console.log(cursor.value.name, cursor.value.id, cursor.value.email);
+					getData.push({ name: cursor.value.name, email: cursor.value.email });
+					//console.log(cursor.value.name, cursor.value.id, cursor.value.email);
 					//console.log(cursor.key, cursor.value.name, cursor.value.age, cursor.value.email);
 					cursor.continue();
 				} else {
@@ -126,11 +128,13 @@ export default class IndexedDB {
 				}
 		}
 
+		return getData;
+
 	}
 
 	// 删除 指定行
-	remove (pushErr = (err) => {throw new Error(err)}) {
-		var request = this.db.transaction(['person'], 'readwrite').objectStore('person').delete(1);
+	remove (i, pushErr = (err) => {throw new Error(err)}) {
+		var request = this.db.transaction(['person'], 'readwrite').objectStore('person').delete(i);
 		request.onsuccess = (event) => {
 			console.log('remove success');
 		}
@@ -139,9 +143,9 @@ export default class IndexedDB {
 		}
 	}
 
-	update (pushErr = (err) => {throw new Error(err)}) {
+	update (i, pushErr = (err) => {throw new Error(err)}) {
 		var request = this.db.transaction(['person'], 'readwrite').objectStore('person')
-		.put({id: 1, name: '李四', email: 'ilvseyinfu@gmail.com'})
+		.put(i)
 
 		request.onsuccess = (event) => {
 			console.log('update success');
