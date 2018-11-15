@@ -130,6 +130,7 @@ export default {
         name: dataArr[0],
         email: dataArr[1]
       });
+      this.input = '';
       this.$message.success('增加成功');
     },
 
