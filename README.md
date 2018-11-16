@@ -9,7 +9,7 @@
 6. 支持二进制存储   
 
 
-我写了一个[通讯录](https://github.com/ilvseyinfu/indexedDB)的项目，利用indexeddb在浏览器持续化端存储通讯录数据
+我写了一个[通讯录](https://github.com/ilvseyinfu/indexedDB)的项目，利用indexeddb在浏览器持续化端存储通讯录数据，支持通讯录导入，新增，搜索，修改，删除联系人
 
 
 学习自: [阮一峰浏览器数据库](http://www.ruanyifeng.com/blog/2018/07/indexeddb.html) & [indexedDB API](https://wangdoc.com/javascript/bom/indexeddb.html#indexeddb-%E5%AF%B9%E8%B1%A1)
@@ -24,7 +24,7 @@ yarn start
 ```
 
 #### 示例:
-![演示图片](https://github.com/ilvseyinfu/blog/raw/master/images/indexeddb.jpg)
+![演示图片](https://github.com/ilvseyinfu/blog/raw/master/images/new_address.jpg)
 
 #### 我贴出大概示例：
 
