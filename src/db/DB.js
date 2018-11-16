@@ -55,12 +55,12 @@ export default class IndexedDB {
 	}
 
 
-	addAll (store, pushErr = (err) => {throw new Error(err)}) {
+	addAll (store, table, pushErr = (err) => {throw new Error(err)}) {
 
 		if(this.db) {
 
-			let transaction = this.db.transaction(['person'], 'readwrite');
-			let objectStore = transaction.objectStore('person')
+			let transaction = this.db.transaction([table], 'readwrite');
+			let objectStore = transaction.objectStore(table)
 			store.map((item) => {
 				let request = objectStore.put(item);
 				request.onsuccess = (event) => {
@@ -74,13 +74,13 @@ export default class IndexedDB {
 
 	}
 
-  add (item, pushErr = (err) => {throw new Error(err)}) {
+  add (item, table, pushErr = (err) => {throw err}) {
 
   	console.log(this.db);
 		if(this.db) {
 
-				let transaction = this.db.transaction(['person'], 'readwrite');
-				let objectStore = transaction.objectStore('person')
+				let transaction = this.db.transaction([table], 'readwrite');
+				let objectStore = transaction.objectStore(table);
 				let request = objectStore.put(item);
 
 				request.onsuccess = (event) => {
@@ -94,10 +94,10 @@ export default class IndexedDB {
 		
 	}
 
-	read ( pushErr = (err) => {throw new Error(err)}) {
+	read (table, pushErr = (err) => {throw new Error(err)}) {
 		if(this.db) {
-			var transaction = this.db.transaction(['person']);
-			var objectStore = transaction.objectStore('person');
+			var transaction = this.db.transaction([table]);
+			var objectStore = transaction.objectStore(table);
 			var request = objectStore.get(1);
 			request.onerror = (event) => {
 				pushErr('读取异常')
@@ -112,9 +112,9 @@ export default class IndexedDB {
 		}
 	}
 
-  readAll (pushErr = (err) => {throw new Error(err)}) {
+  readAll (table, pushErr = (err) => {throw new Error(err)}) {
 		let getData = [];
-		var objectStore = this.db.transaction('person').objectStore('person')
+		var objectStore = this.db.transaction(table).objectStore(table)
 
 		objectStore.openCursor().onsuccess =  (event) => {
 				var cursor = event.target.result;
@@ -133,8 +133,8 @@ export default class IndexedDB {
 	}
 
 	// 删除 指定行
-	remove (i, pushErr = (err) => {throw new Error(err)}) {
-		var request = this.db.transaction(['person'], 'readwrite').objectStore('person').delete(i);
+	remove (i, table, pushErr = (err) => {throw new Error(err)}) {
+		var request = this.db.transaction([table], 'readwrite').objectStore(table).delete(i);
 		request.onsuccess = (event) => {
 			console.log('remove success');
 		}
@@ -154,9 +154,9 @@ export default class IndexedDB {
 	}
 
 	// 指定更新
-	update (i, pushErr = (err) => {throw new Error(err)}) {
-		var request = this.db.transaction(['person'], 'readwrite').objectStore('person')
-		.put(i)
+	update (o, table, pushErr = (err) => {throw new Error(err)}) {
+		var request = this.db.transaction([table], 'readwrite').objectStore(table)
+		.put(o)
 
 		request.onsuccess = (event) => {
 			console.log('update success');

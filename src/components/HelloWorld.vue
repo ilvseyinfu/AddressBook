@@ -39,7 +39,7 @@
                 </el-button>
               <el-button
                 size="mini"
-                @click="handleDelete(scope.$index, scope.row)">
+                @click="handleDelete(scope.$index, tables[0].name)">
                 <img class="edit" src="../assets/del.svg" />
                 </el-button>
             </template>
@@ -55,7 +55,7 @@
           <el-input suffix-icon="el-icon-plus" v-model.trim="modify" placeholder="请输入修改内容" ></el-input>
           <span slot="footer" class="dialog-footer">
             <el-button @click="modifyDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="doModify">确 定</el-button>
+            <el-button type="primary" @click="doModify(tables[0].name)">确 定</el-button>
           </span>
         </el-dialog>
 
@@ -103,12 +103,12 @@ export default {
 
     // 2s 后插入本地存储的模拟数据
     setTimeout(() => {
-      this.table = this.db_person.addAll(this.store);
+       //this.table = this.db_person.addAll(this.store, this.tables[0].name);
     }, 1000)
 
     // 5s 后读取本地存储的模拟数据 进行渲染
     setTimeout(() => {
-      this.tableData = this.db_person.readAll();
+      this.tableData = this.db_person.readAll(this.tables[0].name);
       this.$message.success('本地数据加载成功');
       this.loading = false;
     }, 3000)
@@ -120,17 +120,35 @@ export default {
     addOne () {
       let dataArr = [];
       dataArr = this.input.split(' ');
-      this.db_person.add({
-        id: this.tableData.length,
-        name: dataArr[0],
-        email: dataArr[1]
-      })
-      this.tableData.push({
-        name: dataArr[0],
-        email: dataArr[1]
-      });
-      this.input = '';
-      this.$message.success('增加成功');
+      try{
+        this.db_person.add({
+          id: this.tableData.length,
+          name: dataArr[0],
+          email: dataArr[1]
+        }, this.tables[0].name)
+
+
+        this.tableData.push({
+          name: dataArr[0],
+          email: dataArr[1]
+        });
+        let num1 = this.tableData.length;
+        console.log(num1)
+        this.tableData = _.uniqBy(this.tableData, 'email');
+        let num2 = this.tableData.length;
+        console.log(num2)
+        this.input = '';
+        if(num1 == num2) {
+          this.$message.success('增加成功');
+        } else {
+          this.$message.error('增加失败， 邮件不能重复输入');
+        }
+        
+      } catch (err) {
+        this.$message.error('增加失败');
+      }
+
+
     },
 
     handleEdit (i) {
@@ -138,7 +156,7 @@ export default {
       this.modify_index = i;
     },
 
-    doModify () {
+    doModify (table) {
       let dataArr = [];
       dataArr = this.modify.split(' ');
       // 前端修改
@@ -150,14 +168,14 @@ export default {
         id: this.modify_index,
         name: dataArr[0],
         email: dataArr[1]
-      })
+      }, table)
       this.$message.success('更新数据成功');
       this.modifyDialogVisible = false
     },
 
-    handleDelete (i) {
+    handleDelete (i, table) {
       // 数据库删除指定数据
-      this.db_person.remove(i);
+      this.db_person.remove(i, table);
       // 前端删除数据
       this.tableData.splice(i, 1);
       this.$message.success('删除成功');
