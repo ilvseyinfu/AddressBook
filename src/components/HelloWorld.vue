@@ -7,11 +7,16 @@
     </div>
 
     <div class="input">
-      <el-input suffix-icon="el-icon-plus" v-model.trim="input" placeholder="请输入内容" @keyup.enter.native="addOne"></el-input>
+      <el-input suffix-icon="el-icon-plus" v-model.trim="input" placeholder="请输入添加内容" @keyup.enter.native="addOne"></el-input>
+    </div>
+
+
+    <div class="input">
+      <el-input suffix-icon="el-icon-search" v-model.trim="search" placeholder="请输入搜索姓名" @keyup.enter.native="searchOne"></el-input>
     </div>
 
     <div class="clear">
-      <el-button v-if="!loading" size="small" type="primary" plain @click="removeAll">一键清除</el-button>
+      <el-button v-if="!loading" size="small" type="primary" plain @click="removeAll">一键清除所有联系人</el-button>
     </div>
 
     <div class="list">
@@ -74,6 +79,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      search: '',
       modify_index: null,
       modify: '',
       loading: true,
@@ -111,23 +117,46 @@ export default {
       this.tableData = this.db_person.readAll(this.tables[0].name);
       this.$message.success('本地数据加载成功');
       this.loading = false;
-    }, 3000)
+    }, 2000)
 
 
   },
 
   methods: {
+    
+    searchOne() {
+      this.loading = true;
+      //alert('search')
+      //每次查询指定信息前先全部更新后台数据,保持前后台数据同步
+      this.tableData = this.db_person.readAll(this.tables[0].name);
+
+      // 因为查询数据是异步的 为了防止出错 等待三秒
+      setTimeout( () => {
+        this.tableData = this.tableData.filter(i => {
+
+          if(i.name == this.search || this.search == '') {
+            return i
+          }
+        })
+        this.loading = false;        
+      }, 2000)
+
+
+
+    },
+
+
     addOne () {
       let dataArr = [];
       dataArr = this.input.split(' ');
       try{
+        // 后端添加数据
         this.db_person.add({
           id: this.tableData.length,
           name: dataArr[0],
           email: dataArr[1]
         }, this.tables[0].name)
-
-
+        // 前端添加数据
         this.tableData.push({
           name: dataArr[0],
           email: dataArr[1]

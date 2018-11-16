@@ -94,23 +94,27 @@ export default class IndexedDB {
 		
 	}
 
-	read (table, pushErr = (err) => {throw new Error(err)}) {
+	read (i, table, pushErr = (err) => {throw new Error(err)}) {
 		if(this.db) {
+			var getData;
 			var transaction = this.db.transaction([table]);
 			var objectStore = transaction.objectStore(table);
-			var request = objectStore.get(1);
+			var request = objectStore.get(i);
 			request.onerror = (event) => {
 				pushErr('读取异常')
 			}
 			request.onsuccess = (event) => {
 				if(request.result) {
-					console.log(request.result );
+					getData = request.result
 				} else {
 					pushErr('没有数据');
 				}
-			}					
+			}
+			return getData;					
 		}
 	}
+
+
 
   readAll (table, pushErr = (err) => {throw new Error(err)}) {
 		let getData = [];
