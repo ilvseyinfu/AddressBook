@@ -97,7 +97,8 @@ export default {
         }],
       // 本地模拟存储数据
       store: [
-        { id: 0, name: '张三', email: 'ilvseyinfu1@gmail.com' },
+        { id: 0, name: '张三', email: 'example1@gmail.com' },
+        { id: 1, name: '李四', email: 'example2@gmail.com' },
       ],
       // 表配置
       tables: [
@@ -113,10 +114,10 @@ export default {
 
     // 1s 后插入本地存储的模拟数据
     setTimeout(() => {
-       //this.table = this.db_person.addAll(this.store, this.tables[0].name);
+       this.table = this.db_person.addAll(this.store, this.tables[0].name);
     }, 1000)
 
-    // 5s 后读取本地存储的模拟数据 进行渲染
+    // 2s 后读取本地存储的模拟数据 进行渲染
     setTimeout(() => {
       this.tableData = this.db_person.readAll(this.tables[0].name);
       this.$message.success('本地数据加载成功');
