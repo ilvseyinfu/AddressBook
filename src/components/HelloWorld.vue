@@ -66,6 +66,10 @@
 
 
     </div>
+    <div class="footer">
+      <span><i class="el-icon-loading" style="margin-right: 5px;"></i>indexedDB AddressBook by ilv</span>
+    </div>
+    
   </div>
 
 
@@ -107,7 +111,7 @@ export default {
     this.db_person.callback();
     this.db_person.open(this.tables[0]);
 
-    // 2s 后插入本地存储的模拟数据
+    // 1s 后插入本地存储的模拟数据
     setTimeout(() => {
        //this.table = this.db_person.addAll(this.store, this.tables[0].name);
     }, 1000)
@@ -126,7 +130,6 @@ export default {
     
     searchOne() {
       this.loading = true;
-      //alert('search')
       //每次查询指定信息前先全部更新后台数据,保持前后台数据同步
       this.tableData = this.db_person.readAll(this.tables[0].name);
 
@@ -140,9 +143,6 @@ export default {
         })
         this.loading = false;        
       }, 2000)
-
-
-
     },
 
 
@@ -289,5 +289,11 @@ a {
   height: 20px;
 }
 
+.footer {
+  width: 500px;
+  position: absolute;
+  bottom: 5px;
+
+}
 
 </style>
